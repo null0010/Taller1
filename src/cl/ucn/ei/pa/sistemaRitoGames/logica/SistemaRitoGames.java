@@ -12,15 +12,15 @@ public interface SistemaRitoGames {
 
     public boolean ingresarSkinPersonaje(String nombreSkin, String calidad);
 
-    public boolean ingresarSkin(String nombreSkin, String calidad);
+    public boolean ingresarSkinListaGeneral(String nombreSkin);
 
     public boolean ingresarCuenta(String nombre, String contraseña, String nick, int nivel, int rp, String region);
 
-    public void asociarPersonajeCuenta(String nombrePersonaje, String nombreCuenta);
+    public boolean asociarPersonajeCuenta(String nombrePersonaje, String nombreCuenta);
 
-    public void asociarSkinPersonaje(String nombreSkin, String nombreCuenta);
+    public boolean asociarSkinPersonaje(String nombreSkin, String nombreCuenta);
 
-    public void asociarSkinCuenta(String nombreSkin, String nombreCuenta);
+    public boolean asociarSkinCuenta(String nombreSkin, String nombreCuenta);
 
     public void ingresarRecaudacion(String nombrePersonaje, int recaudacion);
 
