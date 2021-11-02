@@ -167,7 +167,7 @@ public class Cuenta {
      *
      * @return the listaPersonajes
      */
-    public ListaPersonajes getListaPersona() {
+    public ListaPersonajes getListaPersonajes() {
         return listaPersonajes;
     }
 
