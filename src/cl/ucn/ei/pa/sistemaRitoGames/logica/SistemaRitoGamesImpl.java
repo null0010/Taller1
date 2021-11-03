@@ -163,38 +163,38 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
 
     @Override
     public String obtenerSkinsDisponibles(String nombreCuenta) {
-        String skinsDisponibles = "";
+        String salida = "";
         Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
         ListaSkins listaSkinsCuenta = cuenta.getListaSkins();
         for (int i = 0; i < listaSkins.getCantidad(); i++) {
             String nombreSkin = listaSkins.getSkinI(i).getNombre();
             if (listaSkinsCuenta.buscarSkin(nombreSkin) == null) {
-                skinsDisponibles += nombreSkin + "\n";
+                salida += nombreSkin + "\n";
             }
         }
 
-        return skinsDisponibles;
+        return salida;
     }
 
     @Override
     public String obtenerInventario(String nombreCuenta) {
         Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
         ListaPersonajes listaPersonajesCuenta = cuenta.getListaPersonajes();
-        String inventario = "";
+        String salida = "";
         for (int i = 0; i < listaPersonajesCuenta.getCantidad(); i++) {
             Personaje personajeCuenta = listaPersonajesCuenta.getPersonajeI(i);
             ListaSkins listaSkinsPersonajesCuenta = personajeCuenta.getListaSkins();
-            inventario += personajeCuenta.getNombre() + "\n";
+            salida += personajeCuenta.getNombre() + "\n";
             for (int j = 0; j < listaSkinsPersonajesCuenta.getCantidad(); j++) {
                 Skin skin = listaSkinsPersonajesCuenta.getSkinI(j);
                 String nombreSkin = skin.getNombre();
-                inventario += nombreSkin + "\n";
+                salida += nombreSkin + "\n";
             }
 
-            inventario += "\n";
+            salida += "\n";
         }
 
-        return inventario;
+        return salida;
     }
 
     @Override
@@ -205,23 +205,69 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
 
     @Override
     public String obtenerDatosCuenta(String nombreCuenta) {
-        
-        return null;
+        Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
+        String salida = "";
+        salida += cuenta.getNombre() + "\n"
+                     + cuenta.getNick() + "\n";
+
+        int longitudContraseña = cuenta.getContraseña().length();
+        String contraseñaSemiCensurada = "";
+        for (int i = 0; i < longitudContraseña - 3; i++) {
+            contraseñaSemiCensurada += "*";
+        }
+
+        contraseñaSemiCensurada += cuenta.getContraseña().substring(longitudContraseña - 3, longitudContraseña);
+        salida += contraseñaSemiCensurada + "\n";
+
+        return salida;
     }
 
     @Override
     public void cambiarContraseña(String nombreCuenta, String nuevaContraseña) {
-
+        Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
+        cuenta.setContraseña(nuevaContraseña);
     }
 
     @Override
     public String obtenerRecaudacionPorRol() {
-        return null;
+        String salida = "";
+        for (Rol rol : Rol.values()) {
+            salida += rol.name() + "\n";
+            int recaudacionPorRol = 0;
+            for (int i = 0; i < listaPersonajes.getCantidad(); i++) {
+                Personaje personaje = listaPersonajes.getPersonajeI(i);
+                int recaudacion = personaje.getRecaudacion();
+                if (personaje.getRol() == rol) {
+                    recaudacionPorRol += recaudacion;
+                }
+            }
+
+            salida += recaudacionPorRol + "\n";
+            salida += "\n";
+        }
+
+        return salida;
     }
 
     @Override
     public String obtenerRecaudacionPorRegion() {
-        return null;
+        String salida = "";
+        for (Region region : Region.values()) {
+            salida += region.name() + "\n";
+            int recaudacionPorRegion = 0;
+            for (int i = 0; i < listaCuentas.getCantidad(); i++) {
+                Cuenta cuenta = listaCuentas.getCuentaI(i);
+                int recaudacion = cuenta.getRecaudacion();
+                if (cuenta.getRegion() == region) {
+                    recaudacionPorRegion += recaudacion;
+                }
+            }
+
+            salida += recaudacionPorRegion + "\n";
+            salida += "\n";
+        }
+
+        return salida;
     }
 
     @Override
