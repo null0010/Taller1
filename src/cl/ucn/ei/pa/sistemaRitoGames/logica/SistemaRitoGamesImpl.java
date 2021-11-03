@@ -123,33 +123,89 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
 
     @Override
     public boolean comprarSkin(String nombreCuenta, String nombrePersonaje, String nombreSkin) {
+        Skin skin = listaSkins.buscarSkin(nombreSkin);
+        if (skin == null) {
+            throw new NullPointerException("El skin no existe en la tienda.");
+        }
 
+        Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
+        Personaje personajeCuenta = cuenta.getListaPersonajes().buscarPersonaje(nombrePersonaje);
+        ListaSkins listaSkinsPersonajeCuenta = personajeCuenta.getListaSkins();
+        ListaSkins listaSkinsCuenta = cuenta.getListaSkins();
+        int montoActualizado = cuenta.getRp() - skin.getCalidad().getPrecio();
+        if (montoActualizado >= 0) {
+            cuenta.setRp(montoActualizado);
+            listaSkinsPersonajeCuenta.agregarSkin(skin);
+            listaSkinsCuenta.agregarSkin(skin);
+            return true;
+        }
 
         return false;
     }
 
     @Override
     public boolean comprarPersonaje(String nombreCuenta, String nombrePersonaje) {
+        Personaje personaje = listaPersonajes.buscarPersonaje(nombrePersonaje);
+        if (personaje == null) {
+            throw new NullPointerException("El personaje no existe en la tienda.");
+        }
+
+        Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
+        ListaPersonajes listaPersonajesCuenta = cuenta.getListaPersonajes();
+        int montoActualizado = cuenta.getRp() - Personaje.getPrecio();
+        if (montoActualizado >= 0) {
+            listaPersonajesCuenta.agregarPersonaje(personaje);
+            return true;
+        }
+
         return false;
     }
 
     @Override
     public String obtenerSkinsDisponibles(String nombreCuenta) {
-        return null;
+        String skinsDisponibles = "";
+        Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
+        ListaSkins listaSkinsCuenta = cuenta.getListaSkins();
+        for (int i = 0; i < listaSkins.getCantidad(); i++) {
+            String nombreSkin = listaSkins.getSkinI(i).getNombre();
+            if (listaSkinsCuenta.buscarSkin(nombreSkin) == null) {
+                skinsDisponibles += nombreSkin + "\n";
+            }
+        }
+
+        return skinsDisponibles;
     }
 
     @Override
     public String obtenerInventario(String nombreCuenta) {
-        return null;
+        Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
+        ListaPersonajes listaPersonajesCuenta = cuenta.getListaPersonajes();
+        String inventario = "";
+        for (int i = 0; i < listaPersonajesCuenta.getCantidad(); i++) {
+            Personaje personajeCuenta = listaPersonajesCuenta.getPersonajeI(i);
+            ListaSkins listaSkinsPersonajesCuenta = personajeCuenta.getListaSkins();
+            inventario += personajeCuenta.getNombre() + "\n";
+            for (int j = 0; j < listaSkinsPersonajesCuenta.getCantidad(); j++) {
+                Skin skin = listaSkinsPersonajesCuenta.getSkinI(j);
+                String nombreSkin = skin.getNombre();
+                inventario += nombreSkin + "\n";
+            }
+
+            inventario += "\n";
+        }
+
+        return inventario;
     }
 
     @Override
     public void recargarRp(String nombreCuenta, int cantidadRp) {
-
+        Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
+        cuenta.setRp(cuenta.getRp() + cantidadRp);
     }
 
     @Override
     public String obtenerDatosCuenta(String nombreCuenta) {
+        
         return null;
     }
 
