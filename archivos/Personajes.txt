@@ -1,4 +1,4 @@
-Jinx,ADC,1,Jinx Elfa Buena,N,Jinx guardiana estelar,L
+Jinx,ADC,2,Jinx Elfa Buena,N,Jinx guardiana estelar,L
 Sett,TOP,0,Sett Puño del dragón,E
 Lillia,JG,0,Lillia flor espiritual,E
 Vex,MD,1,Portadora del amanecer,N
