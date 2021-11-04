@@ -287,15 +287,32 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
 
     @Override
     public String obtenerCantidadPersonajesPorRol() {
+        String salida = "";
+        for (Rol rol : Rol.values()) {
+            int contador = 0;
+            salida += rol.toString() + ",";
+            for (int i = 0; i < listaPersonajes.getCantidad(); i++) {
+                Personaje personaje = listaPersonajes.getPersonajeI(i);
+                if (rol == personaje.getRol()) {
+                    contador++;
+                }
+            }
+            salida += contador + "\n";
+        }
 
-
-        return null;
+        return salida;
     }
 
     @Override
     public void bloquearJugador(String nombreCuenta) {
         Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
-        cuenta.setBloqueado(true);
+        cuenta.setIsBloqueado(true);
+    }
+
+    @Override
+    public boolean isJugadorBloqueado(String nombreCuenta) {
+        Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
+        return cuenta.getIsBloqueado();
     }
 
     @Override
