@@ -151,7 +151,7 @@ public class Cuenta {
      *
      * @return the isBloqueado
      */
-    public boolean isBloqueado() {
+    public boolean getIsBloqueado() {
         return isBloqueado;
     }
 
@@ -159,7 +159,7 @@ public class Cuenta {
      *
      * @param isBloqueado
      */
-    public void setBloqueado(boolean isBloqueado) {
+    public void setIsBloqueado(boolean isBloqueado) {
         this.isBloqueado = isBloqueado;
     }
 
