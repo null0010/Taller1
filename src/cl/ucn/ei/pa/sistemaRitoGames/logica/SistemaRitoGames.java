@@ -54,6 +54,8 @@ public interface SistemaRitoGames {
 
     public void bloquearJugador(String nombreCuenta);
 
+    public boolean isJugadorBloqueado(String nombreCuenta); //agregar a diagrama y contrato
+
     public String obtenerDatosCuentasOrdenadasPorNivel();
 
     public String obtenerDatosPersonajes();
