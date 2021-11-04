@@ -100,7 +100,7 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
 
     @Override
     public String obtenerSkinsDisponiblesPersonaje(String nombreCuenta, String nombrePersonaje) {
-        StringBuilder skinsDisponiblesPersonaje = new StringBuilder();
+        String salida = "";
         Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
         Personaje personajeCuenta = cuenta.getListaPersonajes().buscarPersonaje(nombrePersonaje);
         if (personajeCuenta == null) {
@@ -114,11 +114,12 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
         for (int i = 0; i < listaSkinsPersonajeJuego.getCantidad(); i++) {
             String nombreSkin = listaSkinsPersonajeJuego.getSkinI(i).getNombre();
             if (listaSkinsPersonajeCuenta.buscarSkin(nombreSkin) == null) {
-                skinsDisponiblesPersonaje.append(nombreSkin).append("\n");
+                salida = nombreSkin
+                       + "\n";
             }
         }
 
-        return skinsDisponiblesPersonaje.toString();
+        return salida;
     }
 
     @Override
@@ -155,8 +156,10 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
         int montoActualizado = cuenta.getRp() - Personaje.getPrecio();
         if (montoActualizado >= 0) {
             listaPersonajesCuenta.agregarPersonaje(personaje);
+            cuenta.setNivel(cuenta.getNivel() + 1);
             return true;
         }
+
 
         return false;
     }
@@ -232,7 +235,7 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
     public String obtenerRecaudacionPorRol() {
         String salida = "";
         for (Rol rol : Rol.values()) {
-            salida += rol.name() + "\n";
+            salida += rol.toString() + "\n";
             int recaudacionPorRol = 0;
             for (int i = 0; i < listaPersonajes.getCantidad(); i++) {
                 Personaje personaje = listaPersonajes.getPersonajeI(i);
@@ -253,7 +256,7 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
     public String obtenerRecaudacionPorRegion() {
         String salida = "";
         for (Region region : Region.values()) {
-            salida += region.name() + "\n";
+            salida += region.toString() + "\n";
             int recaudacionPorRegion = 0;
             for (int i = 0; i < listaCuentas.getCantidad(); i++) {
                 Cuenta cuenta = listaCuentas.getCuentaI(i);
@@ -272,36 +275,118 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
 
     @Override
     public String obtenerRecaudacionPorPersonaje() {
-        return null;
+        String salida = "";
+        for (int i = 0; i < listaPersonajes.getCantidad(); i++) {
+            Personaje personaje = listaPersonajes.getPersonajeI(i);
+            int recaudacion = personaje.getRecaudacion();
+            salida += personaje.getNombre() + ", " + recaudacion + "\n";
+        }
+
+        return salida;
     }
 
     @Override
     public String obtenerCantidadPersonajesPorRol() {
+
+
         return null;
     }
 
     @Override
     public void bloquearJugador(String nombreCuenta) {
-
+        Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
+        cuenta.setBloqueado(true);
     }
 
     @Override
     public String obtenerDatosCuentasOrdenadasPorNivel() {
-        return null;
+        listaCuentas.ordenarPorNivel();
+        String salida = "";
+        for (int i = 0; i < listaCuentas.getCantidad(); i++) {
+            Cuenta cuenta = listaCuentas.getCuentaI(i);
+            salida += cuenta.getNick()
+                    + " "
+                    + cuenta.getNivel()
+                    + "\n";
+        }
+
+        return salida;
     }
 
     @Override
     public String obtenerDatosPersonajes() {
-        return null;
+        String salida = "";
+        for (int i = 0; i < listaPersonajes.getCantidad(); i++) {
+            Personaje personaje = listaPersonajes.getPersonajeI(i);
+            ListaSkins listaSkinsPersonaje = personaje.getListaSkins();
+            salida += personaje.getNombre()
+                    + ","
+                    + personaje.getRol().toString()
+                    + ","
+                    + listaSkinsPersonaje.getCantidad();
+
+            for (int j = 0; j < listaSkinsPersonaje.getCantidad(); j++) {
+                Skin skin = listaSkinsPersonaje.getSkinI(j);
+                salida += skin.getNombre()
+                        + ","
+                        + skin.getCalidad().toString();
+            }
+
+            salida += "\n";
+        }
+
+        return salida;
     }
 
     @Override
     public String obtenerDatosCuentas() {
-        return null;
+        String salida = "";
+        for (int i = 0; i < listaCuentas.getCantidad(); i++) {
+            Cuenta cuenta = listaCuentas.getCuentaI(i);
+            ListaPersonajes listaPersonajesCuenta = cuenta.getListaPersonajes();
+            salida += cuenta.getNombre()
+                    + ","
+                    + cuenta.getContraseña()
+                    + ","
+                    + cuenta.getNick()
+                    + ","
+                    + cuenta.getNivel()
+                    + ","
+                    + cuenta.getRp()
+                    + ","
+                    + listaPersonajesCuenta.getCantidad();
+
+            for (int j = 0; j < listaPersonajesCuenta.getCantidad(); j++) {
+                Personaje personaje = listaPersonajesCuenta.getPersonajeI(j);
+                ListaSkins listaSkinsPersonajeCuenta = personaje.getListaSkins();
+                salida += ","
+                        + personaje.getNombre()
+                        + ","
+                        + listaPersonajesCuenta.getCantidad();
+
+                for (int k = 0; k < listaSkinsPersonajeCuenta.getCantidad(); k++) {
+                    Skin skin = listaSkinsPersonajeCuenta.getSkinI(k);
+                    salida += ","
+                            + skin.getNombre();
+                }
+            }
+            salida += "\n";
+        }
+
+        return salida;
     }
 
     @Override
     public String obtenerDatosEstadistica() {
-        return null;
+        String salida = "";
+        for (int i = 0; i < listaPersonajes.getCantidad(); i++) {
+            Personaje personaje = listaPersonajes.getPersonajeI(i);
+            salida += personaje.getNombre()
+                    + ","
+                    + personaje.getRecaudacion()
+                    + "\n";
+        }
+
+        return salida;
     }
 }
