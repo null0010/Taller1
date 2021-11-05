@@ -38,10 +38,11 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
     }
 
     @Override
-    public boolean ingresarSkinListaGeneral(String nombreSkin) {
+    public boolean ingresarSkinListaGeneral() { //eliminar parametro innecesario
         int indicePersonaje = listaPersonajes.getCantidad() - 1;
         Personaje personaje = listaPersonajes.getPersonajeI(indicePersonaje);
-        Skin skin = personaje.getListaSkins().buscarSkin(nombreSkin);
+        int indiceSkin = personaje.getListaSkins().getCantidad() - 1;
+        Skin skin = personaje.getListaSkins().getSkinI(indiceSkin);
         return listaSkins.agregarSkin(skin);
     }
 
@@ -63,7 +64,7 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
     }
 
     @Override
-    public boolean asociarSkinPersonaje(String nombreSkin, String nombreCuenta) {
+    public boolean asociarSkinPersonajeCuenta(String nombreSkin) { //eliminar parametro nombreCuenta, no es necesario, se cambio nombre
         int indiceCuenta = listaCuentas.getCantidad() - 1;
         Cuenta cuenta = listaCuentas.getCuentaI(indiceCuenta);
         ListaPersonajes listaPersonajesCuenta = cuenta.getListaPersonajes();
@@ -75,7 +76,7 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
     }
 
     @Override
-    public boolean asociarSkinCuenta(String nombreSkin, String nombreCuenta) {
+    public boolean asociarSkinCuenta(String nombreSkin) { //eliminar parametro nombreCuenta, no es necesario
         int indiceCuenta = listaCuentas.getCantidad() - 1;
         Cuenta cuenta = listaCuentas.getCuentaI(indiceCuenta);
         ListaSkins listaSkinsCuenta =  cuenta.getListaSkins();
@@ -391,7 +392,11 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
                             + skin.getNombre();
                 }
             }
-            salida += "\n";
+
+
+            salida += ","
+                    + cuenta.getRegion()
+                    +"\n";
         }
 
         return salida;
