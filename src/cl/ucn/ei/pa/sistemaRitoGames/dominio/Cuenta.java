@@ -33,6 +33,8 @@ public class Cuenta {
         this.nivel = nivel;
         this.rp = rp;
         this.region = region;
+        this.listaPersonajes = new ListaPersonajes(155);
+        this.listaSkins = new ListaSkins(999);
     }
 
     /**
