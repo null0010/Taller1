@@ -18,6 +18,7 @@ public class Personaje {
     public Personaje(String nombre, Rol rol) {
         this.nombre = nombre;
         this.rol = rol;
+        this.listaSkins = new ListaSkins(999);
     }
 
     /**
