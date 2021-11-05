@@ -7,22 +7,25 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) {
         SistemaRitoGames sistemaRitoGames = new SistemaRitoGamesImpl();
-
+        cargarPersonajes(sistemaRitoGames);
+        System.out.println(sistemaRitoGames.obtenerDatosPersonajes());
+        //cargarCuentas(sistemaRitoGames);
+        //cargarEstadisticas(sistemaRitoGames);
 
     }
 
 
     public static void cargarPersonajes(SistemaRitoGames sistemaRitoGames) {
-        File archivoPersonajes = new File("archivos/Personaje.txt");
+        File archivoPersonajes = new File("archivos/Personajes.txt");
         try (Scanner scannerFile = new Scanner(archivoPersonajes)) {
             while (scannerFile.hasNext()) {
-                String linea = scannerFile.next();
+                String linea = scannerFile.nextLine();
                 String[] partes = linea.split(",");
                 String nombre = partes[0];
                 String rol = partes[1];
                 int cantidadSkins = Integer.parseInt(partes[2]);
                 sistemaRitoGames.ingresarPersonaje(nombre, rol);
-                for (int i = 3; i < cantidadSkins; i += 2) {
+                for (int i = 3; i < cantidadSkins + 4; i += 2) {
                     String nombreSkin = partes[i];
                     String calidad = partes[i + 1];
                     sistemaRitoGames.ingresarSkinPersonaje(nombreSkin, calidad);
