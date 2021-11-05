@@ -22,7 +22,8 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
 
     @Override
     public boolean ingresarPersonaje(String nombre, String rol) {
-        Personaje personaje = new Personaje(nombre, Rol.valueOf(rol));
+        Rol rolEnum = Rol.valueOf(rol);
+        Personaje personaje = new Personaje(nombre, rolEnum);
         return listaPersonajes.agregarPersonaje(personaje);
     }
 
@@ -31,7 +32,8 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
         int indicePersonaje = listaPersonajes.getCantidad() - 1;
         Personaje personaje = listaPersonajes.getPersonajeI(indicePersonaje);
         ListaSkins listaSkinsPersonaje = personaje.getListaSkins();
-        Skin skin = new Skin(nombreSkin, Calidad.valueOf(calidad));
+        Calidad calidadEnum = Calidad.valueOf(calidad);
+        Skin skin = new Skin(nombreSkin, calidadEnum);
         return listaSkinsPersonaje.agregarSkin(skin);
     }
 
@@ -45,7 +47,8 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
 
     @Override
     public boolean ingresarCuenta(String nombre, String contraseña, String nick, int nivel, int rp, String region) {
-        Cuenta cuenta = new Cuenta(nombre, contraseña, nick, nivel, rp, Region.valueOf(region));
+        Region regionEnum = Region.valueOf(region);
+        Cuenta cuenta = new Cuenta(nombre, contraseña, nick, nivel, rp, regionEnum);
         return listaCuentas.agregarCuenta(cuenta);
     }
 
@@ -344,9 +347,10 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
 
             for (int j = 0; j < listaSkinsPersonaje.getCantidad(); j++) {
                 Skin skin = listaSkinsPersonaje.getSkinI(j);
-                salida += skin.getNombre()
+                salida += ","
+                        + skin.getNombre()
                         + ","
-                        + skin.getCalidad().toString();
+                        + skin.getCalidad();
             }
 
             salida += "\n";
