@@ -430,7 +430,7 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
     }
 
     @Override
-    public String obtenerDatosEstadistica() {
+    public String obtenerDatosEstadisticas() {
         String salida = "";
         for (int i = 0; i < listaPersonajes.getCantidad(); i++) {
             Personaje personaje = listaPersonajes.getPersonajeI(i);
