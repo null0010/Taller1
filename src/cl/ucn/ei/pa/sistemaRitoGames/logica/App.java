@@ -2,6 +2,7 @@ package cl.ucn.ei.pa.sistemaRitoGames.logica;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class App {
@@ -23,7 +24,7 @@ public class App {
             System.out.print("Ingrese su contraseña: ");
             String contraseña = input.next();
             if (nombreCuenta.equals("ADMIN") && contraseña.equals("ADMIN")) {
-                //iniciarMenuAdmin(sistemaRitosGames);
+                iniciarMenuAdmin(sistemaRitoGames, input);
                 isMenuFinalizado = true;
             }
             else {
@@ -45,13 +46,17 @@ public class App {
                         }
                     }
                     else {
-                        if (sistemaRitoGames.isContraseñaCorrecta(nombreCuenta, contraseña)) {
-                            iniciarMenuCliente(sistemaRitoGames, input, nombreCuenta);
-                            isMenuFinalizado = true;
+                        if (sistemaRitoGames.isJugadorBloqueado(nombreCuenta)) {
+                            System.out.println("Lo siento, su cuenta se encuentra bloqueada.");
                         }
                         else {
-                            System.out.println("entro acá.");
-                            System.out.println("Nombre de cuenta y/o contraseña incorrectos.");
+                            if (sistemaRitoGames.isContraseñaCorrecta(nombreCuenta, contraseña)) {
+                                iniciarMenuCliente(sistemaRitoGames, input, nombreCuenta);
+                                isMenuFinalizado = true;
+                            }
+                            else {
+                                System.out.println("Nombre de cuenta y/o contraseña incorrectos.");
+                            }
                         }
                     }
                 }
@@ -79,15 +84,31 @@ public class App {
         }
     }
     public static void registrarCliente(SistemaRitoGames sistemaRitoGames, Scanner input) {
-        System.out.print("Ingrese el nombre la cuenta: ");
+        System.out.print("Ingrese el nombre de la cuenta: ");
         String nombreCuenta = input.next();
+        while (sistemaRitoGames.isUsuarioRegistrado(nombreCuenta)) {
+            System.out.println("Lo siento, ese nombre ya se encuentra registrado, vuelta a intentarlo.");
+            System.out.println("Ingrese el nombre de la cuenta: ");
+            nombreCuenta = input.next();
+        }
+
         System.out.print("Ingrese su contraseña: ");
-        String contrasñea = input.next();
+        String contraseña = input.next();
         System.out.print("Ingrese su nick: ");
         String nick = input.next();
         System.out.print("Ingrese su región (LAS/LAN/EUW/KR/NA/RU): ");
-        String region = input.next();
-        sistemaRitoGames.ingresarCuenta(nombreCuenta, contrasñea, nick, 0, 0, region);
+        String region = input.next().toUpperCase();
+        while (!region.equals("LAS") &&
+               !region.equals("LAN") &&
+               !region.equals("EUW") &&
+               !region.equals("KR") &&
+               !region.equals("NA") &&
+               !region.equals("RU")) {
+            System.out.print("Por favor, ingrese una región valida (LAS/LAN/EUW/KR/NA/RU): ");
+            region = input.next().toUpperCase();
+        }
+
+        sistemaRitoGames.ingresarCuenta(nombreCuenta, contraseña, nick, 0, 0, region);
     }
 
     public static void iniciarMenuCliente(SistemaRitoGames sistemaRitoGames, Scanner input, String nombreCuenta) {
@@ -177,6 +198,7 @@ public class App {
 
                 default:
                     System.out.println("Lo siento, esa opción no se encuentra disponible.");
+                    break;
             }
 
         }
@@ -196,7 +218,75 @@ public class App {
     }
 
 
+    public static void iniciarMenuAdmin(SistemaRitoGames sistemaRitoGames, Scanner input) {
+        System.out.println("Bienvenido al Menu Admin");
+        boolean isCerrarSesion = false;
+        while (!isCerrarSesion) {
+          System.out.println(obtenerOpcionesMenuAdmin());
+          System.out.print("Ingrese una opcion: ");
+          int opcion = input.nextInt();
+          switch (opcion) {
+              case 1:
+                  System.out.println(sistemaRitoGames.obtenerRecaudacionPorRol());
+                  break;
 
+              case 2:
+                  System.out.println(sistemaRitoGames.obtenerRecaudacionPorRegion());
+                  break;
+
+              case 3:
+                  System.out.println(sistemaRitoGames.obtenerRecaudacionPorPersonaje());
+                  break;
+
+              case 4:
+                  System.out.println(sistemaRitoGames.obtenerCantidadPersonajesPorRol());
+                  break;
+
+              case 5:
+                  break;
+
+              case 6:
+                  break;
+
+              case 7:
+                  System.out.print("Ingrese el nombre de la cuenta: ");
+                  String nombreCuenta = input.next();
+                  try {
+                      sistemaRitoGames.bloquearJugador(nombreCuenta);
+                      System.out.println("El jugador ha sido bloqueado exitosamente.");
+                  }
+                  catch (Exception exception) {
+                      exception.printStackTrace();
+                  }
+                  break;
+
+              case 8:
+                  System.out.println(sistemaRitoGames.obtenerDatosCuentasOrdenadasPorNivel());
+                  break;
+
+              case 9:
+                  isCerrarSesion = true;
+                  break;
+
+              default:
+                  System.out.println("Lo siento, esa opción no se encuentra disponible.");
+                  break;
+          }
+        }
+    }
+
+    public static String obtenerOpcionesMenuAdmin() {
+        String opciones = "1) Desplegar recaudacion por rol\n";
+        opciones += "2) Desplegar recaudacion total de ventas por región\n";
+        opciones += "3) Desplegar recaudacion de ventas por personaje\n";
+        opciones += "4) Desplegar la cantidad de personajes por cada rol existente\n";
+        opciones += "5) Agregar personaje al juego\n";
+        opciones += "6) Agregar Skin\n";
+        opciones += "7) Bloquear a un jugador\n";
+        opciones += "8) Desplegar todas las cuentas\n";
+        opciones += "9) Cerrar Sesión\n";
+        return opciones;
+    }
 
     public static void cargarArchivos(SistemaRitoGames sistemaRitoGames) {
         cargarPersonajes(sistemaRitoGames);
