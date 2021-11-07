@@ -104,12 +104,18 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
 
     @Override
     public String obtenerSkinsDisponiblesPersonaje(String nombreCuenta, String nombrePersonaje) {
-        String salida = "";
+        String salida = "Skins disponibles: \n";
         Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
         Personaje personajeCuenta = cuenta.getListaPersonajes().buscarPersonaje(nombrePersonaje);
-        if (personajeCuenta == null) {
-            throw new NullPointerException("El personaje no existe en la cuenta.");
+        if (listaPersonajes.buscarPersonaje(nombrePersonaje) == null) {
+          throw new NullPointerException("El personaje no existe en el juego.");
         }
+        else {
+            if (personajeCuenta == null) {
+                throw new NullPointerException("El personaje no existe en la cuenta.");
+            }
+        }
+
 
         Personaje personajeJuego = listaPersonajes.buscarPersonaje(nombrePersonaje);
         ListaSkins listaSkinsPersonajeCuenta = personajeCuenta.getListaSkins();
@@ -118,13 +124,29 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
         for (int i = 0; i < listaSkinsPersonajeJuego.getCantidad(); i++) {
             String nombreSkin = listaSkinsPersonajeJuego.getSkinI(i).getNombre();
             if (listaSkinsPersonajeCuenta.buscarSkin(nombreSkin) == null) {
-                salida = nombreSkin
+                salida += nombreSkin
                        + "\n";
             }
         }
 
         return salida;
     }
+
+
+    public String obtenerPersonajesDisponibles(String nombreCuenta) {
+        Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
+        ListaPersonajes listaPersonajesCuenta = cuenta.getListaPersonajes();
+        String salida = "Personajes disponibles: \n";
+        for (int i = 0; i < listaPersonajes.getCantidad(); i++) {
+            String nombrePersonaje = listaPersonajes.getPersonajeI(i).getNombre();
+            if (listaPersonajesCuenta.buscarPersonaje(nombrePersonaje) == null) {
+                salida += nombrePersonaje + "\n";
+            }
+        }
+
+        return salida;
+    }
+
 
     @Override
     public boolean comprarSkin(String nombreCuenta, String nombrePersonaje, String nombreSkin) {
@@ -159,7 +181,8 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
         ListaPersonajes listaPersonajesCuenta = cuenta.getListaPersonajes();
         int montoActualizado = cuenta.getRp() - Personaje.getPrecio();
         if (montoActualizado >= 0) {
-            listaPersonajesCuenta.agregarPersonaje(personaje);
+            Personaje personajeCompra = new Personaje(personaje.getNombre(), personaje.getRol());
+            listaPersonajesCuenta.agregarPersonaje(personajeCompra);
             cuenta.setNivel(cuenta.getNivel() + 1);
             return true;
         }
