@@ -333,6 +333,10 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
     @Override
     public void bloquearJugador(String nombreCuenta) {
         Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
+        if (cuenta == null) {
+            throw new NullPointerException("La cuenta no existe.");
+        }
+
         cuenta.setIsBloqueado(true);
     }
 
