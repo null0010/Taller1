@@ -6,13 +6,202 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
         SistemaRitoGames sistemaRitoGames = new SistemaRitoGamesImpl();
+        cargarArchivos(sistemaRitoGames);
+        iniciarSesion(sistemaRitoGames, input);
+        sobrescribirArchivos(sistemaRitoGames);
+    }
+
+
+    public static void iniciarSesion(SistemaRitoGames sistemaRitoGames, Scanner input) {
+        boolean cerrarSistema = false;
+        boolean isMenuFinalizado = false;
+        while (!cerrarSistema) {
+            System.out.print("Ingrese el nombre de su cuenta: ");
+            String nombreCuenta = input.next();
+            System.out.print("Ingrese su contraseña: ");
+            String contraseña = input.next();
+            if (nombreCuenta.equals("ADMIN") && contraseña.equals("ADMIN")) {
+                //iniciarMenuAdmin(sistemaRitosGames);
+                isMenuFinalizado = true;
+            }
+            else {
+                if (!nombreCuenta.equals("ADMIN")) {
+                    if (!sistemaRitoGames.isUsuarioRegistrado(nombreCuenta)) {
+                        System.out.println("Usted no se encuentra regitrado en el sistema.");
+                        System.out.println("1) Registrarse.");
+                        System.out.println("2) Volver a iniciar sesión.");
+                        System.out.print("Ingrese una opción (1 o 2): ");
+                        int opcion = input.nextInt();
+                        while (opcion != 1 && opcion != 2) {
+                            System.out.print("Opción no disponible, vuelva a ingresar una opción: ");
+                            opcion = input.nextInt();
+                        }
+
+                        if (opcion == 1) {
+                            registrarCliente(sistemaRitoGames, input);
+                            System.out.println("Se ha registrado exitosamente.");
+                        }
+                    }
+                    else {
+                        if (sistemaRitoGames.isContraseñaCorrecta(nombreCuenta, contraseña)) {
+                            iniciarMenuCliente(sistemaRitoGames, input, nombreCuenta);
+                            isMenuFinalizado = true;
+                        }
+                        else {
+                            System.out.println("entro acá.");
+                            System.out.println("Nombre de cuenta y/o contraseña incorrectos.");
+                        }
+                    }
+                }
+                else {
+                    System.out.println("Nombre de cuenta y/o contraseña incorrectos.");
+                }
+            }
+
+            if (isMenuFinalizado) {
+                System.out.println("1) Iniciar sesión nuevamente.");
+                System.out.println("2) Cerrar sistema");
+                System.out.print("Ingrese una opción (1 o 2): ");
+                int opcion = input.nextInt();
+                while (opcion != 1 && opcion != 2) {
+                    System.out.print("Opción no disponible, vuelva a ingresar una opción: ");
+                    opcion = input.nextInt();
+                }
+
+                if (opcion == 2) {
+                    cerrarSistema = true;
+                }
+
+                isMenuFinalizado = false;
+            }
+        }
+    }
+    public static void registrarCliente(SistemaRitoGames sistemaRitoGames, Scanner input) {
+        System.out.print("Ingrese el nombre la cuenta: ");
+        String nombreCuenta = input.next();
+        System.out.print("Ingrese su contraseña: ");
+        String contrasñea = input.next();
+        System.out.print("Ingrese su nick: ");
+        String nick = input.next();
+        System.out.print("Ingrese su región (LAS/LAN/EUW/KR/NA/RU): ");
+        String region = input.next();
+        sistemaRitoGames.ingresarCuenta(nombreCuenta, contrasñea, nick, 0, 0, region);
+    }
+
+    public static void iniciarMenuCliente(SistemaRitoGames sistemaRitoGames, Scanner input, String nombreCuenta) {
+        System.out.println("Bienvenido al Menu Cliente");
+        boolean isCerrarSesion = false;
+        while (!isCerrarSesion) {
+            System.out.println(obtenerOpcionesMenuCliente());
+            System.out.print("Eliga una opción: ");
+            int opcion = input.nextInt();
+            switch (opcion) {
+                case 1:
+                    System.out.print("Ingrese el nombre del personaje: ");
+                    String nombrePersonaje = input.next();
+                    try {
+                        System.out.println(sistemaRitoGames.obtenerSkinsDisponiblesPersonaje(nombreCuenta, nombrePersonaje));
+                        System.out.print("Ingrese el nombre de uno de los skins disponibles: ");
+                        String nombreSkins = input.next();
+                        boolean isCompraExitosa = sistemaRitoGames.comprarSkin(nombreCuenta, nombrePersonaje, nombreSkins);
+                        if (isCompraExitosa) {
+                            System.out.println("La compra se ha realizado exitosamente.");
+                        }
+                        else {
+                            System.out.println("No tienes saldo suficiente!.");
+                        }
+                    }
+                    catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+                    break;
+
+                case 2:
+                    System.out.println(sistemaRitoGames.obtenerPersonajesDisponibles(nombreCuenta));
+                    System.out.print("Ingrese el nombre de uno de los personajes disponibles: ");
+                    nombrePersonaje = input.next();
+                    try {
+                        boolean isCompraExitosa = sistemaRitoGames.comprarPersonaje(nombreCuenta, nombrePersonaje);
+                        if (isCompraExitosa) {
+                            System.out.println("La compra se ha realizado exitosamente.");
+                        }
+                        else {
+                            System.out.println("No tienes saldo suficiente!.");
+                        }
+                    }
+                    catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+
+                    break;
+
+                case 3:
+                    System.out.println(sistemaRitoGames.obtenerSkinsDisponibles(nombreCuenta));
+                    break;
+
+
+                case 4:
+                    System.out.println(sistemaRitoGames.obtenerInventario(nombreCuenta));
+                    break;
+
+
+                case 5:
+                    System.out.print("Ingrese la cantidad de rp a recargar: ");
+                    int rp = input.nextInt();
+                    sistemaRitoGames.recargarRp(nombreCuenta, rp);
+                    break;
+
+                case 6:
+                    System.out.println();
+                    System.out.println(sistemaRitoGames.obtenerDatosCuenta(nombreCuenta));
+                    System.out.print("¿Desea cambiar su contraseña? (Si/No): ");
+                    String respuesta = input.next();
+                    while (!respuesta.equalsIgnoreCase("si") && !respuesta.equalsIgnoreCase("no")) {
+                        System.out.print("¿Desea cambiar su contraseña? (Si/No): ");
+                        respuesta = input.next();
+                    }
+
+                    if (respuesta.equalsIgnoreCase("si")) {
+                        System.out.print("Ingrese su nueva contraseña: ");
+                        String nuevaContraseña = input.next();
+                        sistemaRitoGames.cambiarContraseña(nombreCuenta, nuevaContraseña);
+                    }
+
+                    break;
+
+                case 7:
+                    isCerrarSesion = true;
+                    break;
+
+                default:
+                    System.out.println("Lo siento, esa opción no se encuentra disponible.");
+            }
+
+        }
+
+
+    }
+
+    public static String obtenerOpcionesMenuCliente() {
+        String opciones = "1) Comprar Skin\n";
+        opciones += "2) Comprar Personaje\n";
+        opciones += "3) Skins Disponibles\n";
+        opciones += "4) Mostrar Inventario\n";
+        opciones += "5) Recargar RP\n";
+        opciones += "6) Mostrar Datos de cuenta\n";
+        opciones += "7) Cerrar Sesión\n";
+        return opciones;
+    }
+
+
+
+
+    public static void cargarArchivos(SistemaRitoGames sistemaRitoGames) {
         cargarPersonajes(sistemaRitoGames);
-        System.out.println(sistemaRitoGames.obtenerDatosPersonajes());
         cargarCuentas(sistemaRitoGames);
-        System.out.println(sistemaRitoGames.obtenerDatosCuentas());
         cargarEstadisticas(sistemaRitoGames);
-        System.out.println(sistemaRitoGames.obtenerDatosEstadistica());
     }
 
 
@@ -52,19 +241,18 @@ public class App {
                 int cantidadPersonajes = Integer.parseInt(partes[5].strip());
                 String region = partes[partes.length - 1];
                 sistemaRitoGames.ingresarCuenta(nombreCuenta, contraseña, nick, nivelCuenta, rp, region);
-
                 int posicionCampo = 6;
                 for(int i = 0; i < cantidadPersonajes; i++){
                     String nombrePersonaje = partes[posicionCampo].strip();
                     sistemaRitoGames.asociarPersonajeCuenta(nombrePersonaje, nombreCuenta);
                     int cantidadSkins = Integer.parseInt(partes[posicionCampo + 1].strip());
-
                     for(int j = 0; j < cantidadSkins; j++){
                         String nombreSkin = partes[posicionCampo + 2 + j].strip();
                         //System.out.println(nombreSkin);
                         sistemaRitoGames.asociarSkinPersonajeCuenta(nombreSkin);
                         sistemaRitoGames.asociarSkinCuenta(nombreSkin);
                     }
+
                     posicionCampo = posicionCampo + 2 + cantidadSkins;
                 }
             }
@@ -89,6 +277,10 @@ public class App {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void sobrescribirArchivos(SistemaRitoGames sistemaRitoGames) {
+
     }
 }
 
