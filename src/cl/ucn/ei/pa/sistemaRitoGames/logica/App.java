@@ -337,7 +337,6 @@ public class App {
                     int cantidadSkins = Integer.parseInt(partes[posicionCampo + 1].strip());
                     for(int j = 0; j < cantidadSkins; j++){
                         String nombreSkin = partes[posicionCampo + 2 + j].strip();
-                        //System.out.println(nombreSkin);
                         sistemaRitoGames.asociarSkinPersonajeCuenta(nombreSkin);
                         sistemaRitoGames.asociarSkinCuenta(nombreSkin);
                     }
