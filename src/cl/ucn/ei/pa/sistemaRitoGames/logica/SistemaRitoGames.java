@@ -30,6 +30,8 @@ public interface SistemaRitoGames {
 
     public String obtenerSkinsDisponiblesPersonaje(String nombreCuenta, String nombrePersonaje);
 
+    public String obtenerPersonajesDisponibles(String nombreCuenta);
+
     public boolean comprarSkin(String nombreCuenta, String nombrePersonaje, String nombreSkin);
 
     public boolean comprarPersonaje(String nombreCuenta, String nombrePersonaje);
