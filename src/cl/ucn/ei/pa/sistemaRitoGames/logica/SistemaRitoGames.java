@@ -64,5 +64,5 @@ public interface SistemaRitoGames {
 
     public String obtenerDatosCuentas();
 
-    public String obtenerDatosEstadistica();
+    public String obtenerDatosEstadisticas();
 }
