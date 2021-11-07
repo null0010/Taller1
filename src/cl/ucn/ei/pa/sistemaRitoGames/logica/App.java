@@ -1,7 +1,6 @@
 package cl.ucn.ei.pa.sistemaRitoGames.logica;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -354,7 +353,7 @@ public class App {
     }
 
     public static void cargarEstadisticas(SistemaRitoGames sistemaRitoGames) {
-        File archivoEstadistica = new File("archivos/Estadistica.txt");
+        File archivoEstadistica = new File("archivos/Estadisticas.txt");
 
         try (Scanner scannerFile = new Scanner(archivoEstadistica)) {
             while (scannerFile.hasNext()) {
@@ -370,8 +369,40 @@ public class App {
     }
 
     public static void sobrescribirArchivos(SistemaRitoGames sistemaRitoGames) {
+        sobrescribirArchivoPersonajes(sistemaRitoGames);
+        sobrescribirArchivoCuentas(sistemaRitoGames);
+        sobrescribirArchivoEstadisticas(sistemaRitoGames);
+    }
+
+
+    public static void sobrescribirArchivoPersonajes(SistemaRitoGames sistemaRitoGames) {
+        try (FileWriter fileWriter = new FileWriter("archivos/Personajes.txt")) {
+            fileWriter.write(sistemaRitoGames.obtenerDatosPersonajes());
+        }
+        catch (Exception exception) {
+            exception.printStackTrace();
+        }
 
     }
+
+    public static void sobrescribirArchivoCuentas(SistemaRitoGames sistemaRitoGames) {
+        try (FileWriter fileWriter = new FileWriter("archivos/Cuentas.txt")) {
+            fileWriter.write(sistemaRitoGames.obtenerDatosCuentas());
+        }
+        catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public static void sobrescribirArchivoEstadisticas(SistemaRitoGames sistemaRitoGames) {
+        try (FileWriter fileWriter = new FileWriter("archivos/Estadisticas.txt")) {
+            fileWriter.write(sistemaRitoGames.obtenerDatosEstadisticas());
+        }
+        catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
 }
 
 
