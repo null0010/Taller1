@@ -4,7 +4,7 @@ public interface SistemaRitoGames {
 
     /**
      * Se ingresa el precio que tendrán todos los personajes.
-     * @param precio Corresponde al precio que tendran todos los personajes.
+     * @param precio Corresponde al precio que tendrán todos los personajes.
      */
     public void ingresarPrecioPersonajes(int precio);
 
