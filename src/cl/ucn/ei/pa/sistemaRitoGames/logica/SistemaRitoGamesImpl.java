@@ -38,7 +38,29 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
     }
 
     @Override
-    public boolean ingresarSkinListaGeneral() { //eliminar parametro innecesario
+    public boolean asociarSkinPersonaje(String nombrePersonaje, String nombreSkin, String calidad) {
+        Personaje personaje = listaPersonajes.buscarPersonaje(nombrePersonaje);
+        if (personaje == null) {
+            throw new NullPointerException("El personaje no existe.");
+        }
+
+        Calidad calidadEnum = Calidad.valueOf(calidad);
+        Skin skin = new Skin(nombreSkin, calidadEnum);
+
+
+        return personaje.getListaSkins().agregarSkin(skin);
+    }
+
+    @Override
+    public boolean asociarSkinListaGeneral(String nombrePersonaje, String nombreSkin) {
+        Personaje personaje = listaPersonajes.buscarPersonaje(nombrePersonaje);
+        ListaSkins listaSkinsPersonaje = personaje.getListaSkins();
+        Skin skin = listaSkinsPersonaje.getSkinI(listaSkinsPersonaje.getCantidad() - 1);
+        return listaSkins.agregarSkin(skin);
+    }
+
+    @Override
+    public boolean ingresarSkinListaGeneral() {
         int indicePersonaje = listaPersonajes.getCantidad() - 1;
         Personaje personaje = listaPersonajes.getPersonajeI(indicePersonaje);
         int indiceSkin = personaje.getListaSkins().getCantidad() - 1;
@@ -64,7 +86,7 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
     }
 
     @Override
-    public boolean asociarSkinPersonajeCuenta(String nombreSkin) { //eliminar parametro nombreCuenta, no es necesario, se cambio nombre
+    public boolean ingresarSkinPersonajeCuenta(String nombreSkin) {
         int indiceCuenta = listaCuentas.getCantidad() - 1;
         Cuenta cuenta = listaCuentas.getCuentaI(indiceCuenta);
         ListaPersonajes listaPersonajesCuenta = cuenta.getListaPersonajes();
@@ -76,7 +98,7 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
     }
 
     @Override
-    public boolean asociarSkinCuenta(String nombreSkin) { //eliminar parametro nombreCuenta, no es necesario
+    public boolean ingresarSkinCuenta(String nombreSkin) {
         int indiceCuenta = listaCuentas.getCantidad() - 1;
         Cuenta cuenta = listaCuentas.getCuentaI(indiceCuenta);
         ListaSkins listaSkinsCuenta =  cuenta.getListaSkins();
@@ -159,8 +181,11 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
         Personaje personajeCuenta = cuenta.getListaPersonajes().buscarPersonaje(nombrePersonaje);
         ListaSkins listaSkinsPersonajeCuenta = personajeCuenta.getListaSkins();
         ListaSkins listaSkinsCuenta = cuenta.getListaSkins();
+        Personaje personajeJuego = listaPersonajes.buscarPersonaje(nombrePersonaje);
         int montoActualizado = cuenta.getRp() - skin.getCalidad().getPrecio();
         if (montoActualizado >= 0) {
+            cuenta.setRecaudacion(cuenta.getRecaudacion() + skin.getCalidad().getPrecio());
+            personajeJuego.setRecaudacion(personajeJuego.getRecaudacion() + skin.getCalidad().getPrecio());
             cuenta.setRp(montoActualizado);
             listaSkinsPersonajeCuenta.agregarSkin(skin);
             listaSkinsCuenta.agregarSkin(skin);
@@ -181,6 +206,8 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
         ListaPersonajes listaPersonajesCuenta = cuenta.getListaPersonajes();
         int montoActualizado = cuenta.getRp() - Personaje.getPrecio();
         if (montoActualizado >= 0) {
+            cuenta.setRecaudacion(cuenta.getRecaudacion() + Personaje.getPrecio());
+            personaje.setRecaudacion(personaje.getRecaudacion() + Personaje.getPrecio());
             Personaje personajeCompra = new Personaje(personaje.getNombre(), personaje.getRol());
             listaPersonajesCuenta.agregarPersonaje(personajeCompra);
             cuenta.setNivel(cuenta.getNivel() + 1);
@@ -411,7 +438,7 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
                 salida += ","
                         + personaje.getNombre()
                         + ","
-                        + listaPersonajesCuenta.getCantidad();
+                        + listaSkinsPersonajeCuenta.getCantidad();
 
                 for (int k = 0; k < listaSkinsPersonajeCuenta.getCantidad(); k++) {
                     Skin skin = listaSkinsPersonajeCuenta.getSkinI(k);
