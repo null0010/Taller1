@@ -1,7 +1,6 @@
 package cl.ucn.ei.pa.sistemaRitoGames.logica;
 
 import java.io.*;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class App {
