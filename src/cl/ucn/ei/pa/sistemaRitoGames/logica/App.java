@@ -29,9 +29,9 @@ public class App {
         while (!cerrarSistema) {
             System.out.print("Ingrese el nombre de su cuenta: ");
             String nombreCuenta = input.next();
-            System.out.print("Ingrese su contraseña: ");
-            String contraseña = input.next();
-            if (nombreCuenta.equals("ADMIN") && contraseña.equals("ADMIN")) {
+            System.out.print("Ingrese su contrasena: ");
+            String contrasena = input.next();
+            if (nombreCuenta.equals("ADMIN") && contrasena.equals("ADMIN")) {
                 iniciarMenuAdmin(sistemaRitoGames, input);
                 isMenuFinalizado = true;
             }
@@ -58,18 +58,18 @@ public class App {
                             System.out.println("Lo siento, su cuenta se encuentra bloqueada.");
                         }
                         else {
-                            if (sistemaRitoGames.isContraseñaCorrecta(nombreCuenta, contraseña)) {
+                            if (sistemaRitoGames.isContrasenaCorrecta(nombreCuenta, contrasena)) {
                                 iniciarMenuCliente(sistemaRitoGames, input, nombreCuenta);
                                 isMenuFinalizado = true;
                             }
                             else {
-                                System.out.println("Nombre de cuenta y/o contraseña incorrectos.");
+                                System.out.println("Nombre de cuenta y/o contrasena incorrectos.");
                             }
                         }
                     }
                 }
                 else {
-                    System.out.println("Nombre de cuenta y/o contraseña incorrectos.");
+                    System.out.println("Nombre de cuenta y/o contrasena incorrectos.");
                 }
             }
 
@@ -106,8 +106,8 @@ public class App {
             nombreCuenta = input.next();
         }
 
-        System.out.print("Ingrese su contraseña: ");
-        String contraseña = input.next();
+        System.out.print("Ingrese su contrasena: ");
+        String contrasena = input.next();
         System.out.print("Ingrese su nick: ");
         String nick = input.next();
         System.out.print("Ingrese su región (LAS/LAN/EUW/KR/NA/RU): ");
@@ -122,7 +122,7 @@ public class App {
             region = input.next().toUpperCase();
         }
 
-        sistemaRitoGames.ingresarCuenta(nombreCuenta, contraseña, nick, 0, 0, region);
+        sistemaRitoGames.ingresarCuenta(nombreCuenta, contrasena, nick, 0, 0, region);
     }
 
     /**
@@ -198,17 +198,17 @@ public class App {
                 case 6:
                     System.out.println();
                     System.out.println(sistemaRitoGames.obtenerDatosCuenta(nombreCuenta));
-                    System.out.print("¿Desea cambiar su contraseña? (Si/No): ");
+                    System.out.print("¿Desea cambiar su contrasena? (Si/No): ");
                     String respuesta = input.next();
                     while (!respuesta.equalsIgnoreCase("si") && !respuesta.equalsIgnoreCase("no")) {
-                        System.out.print("¿Desea cambiar su contraseña? (Si/No): ");
+                        System.out.print("¿Desea cambiar su contrasena? (Si/No): ");
                         respuesta = input.next();
                     }
 
                     if (respuesta.equalsIgnoreCase("si")) {
-                        System.out.print("Ingrese su nueva contraseña: ");
-                        String nuevaContraseña = input.next();
-                        sistemaRitoGames.cambiarContraseña(nombreCuenta, nuevaContraseña);
+                        System.out.print("Ingrese su nueva contrasena: ");
+                        String nuevacontrasena = input.next();
+                        sistemaRitoGames.cambiarContrasena(nombreCuenta, nuevacontrasena);
                     }
 
                     break;
@@ -446,13 +446,13 @@ public class App {
                 String linea = scannerFile.nextLine();
                 String[] partes = linea.split(",");
                 String nombreCuenta = partes[0].strip();
-                String contraseña = partes[1].strip();
+                String contrasena = partes[1].strip();
                 String nick = partes[2].strip();
                 int nivelCuenta = Integer.parseInt(partes[3].strip());
                 int rp = Integer.parseInt(partes[4].strip());
                 int cantidadPersonajes = Integer.parseInt(partes[5].strip());
                 String region = partes[partes.length - 1];
-                sistemaRitoGames.ingresarCuenta(nombreCuenta, contraseña, nick, nivelCuenta, rp, region);
+                sistemaRitoGames.ingresarCuenta(nombreCuenta, contrasena, nick, nivelCuenta, rp, region);
                 int posicionCampo = 6;
                 for(int i = 0; i < cantidadPersonajes; i++){
                     String nombrePersonaje = partes[posicionCampo].strip();
