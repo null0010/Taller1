@@ -1,3 +1,6 @@
-Sett,500000
-Jhin,600000
 Jinx,400000
+Sett,500000
+Lillia,0
+Vex,0
+Jhin,600000
+Kaisa,0
