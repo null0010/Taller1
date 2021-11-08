@@ -51,14 +51,14 @@ public interface SistemaRitoGames {
     /**
      * Ingresa una cuenta a la lista general de cuentas
      * @param nombre Nombre de la cuenta
-     * @param contraseña Contraseña de la cuenta
+     * @param contrasena contrasena de la cuenta
      * @param nick Nick de la cuenta
      * @param nivel Nivel de la cuenta
      * @param rp Rp de la cuenta
      * @param region Region de la cuenta
      * @return boolean
      */
-    public boolean ingresarCuenta(String nombre, String contraseña, String nick, int nivel, int rp, String region);
+    public boolean ingresarCuenta(String nombre, String contrasena, String nick, int nivel, int rp, String region);
 
 
     /**
@@ -98,12 +98,12 @@ public interface SistemaRitoGames {
     public boolean isUsuarioRegistrado(String nombreCuenta);
 
     /**
-     *  Comprueba si la contraseña ingresada por el jugador es correcta
+     *  Comprueba si la contrasena ingresada por el jugador es correcta
      * @param nombreCuenta Nombre de la cuenta
-     * @param contraseña Contraseña de la cuenta
+     * @param contrasena contrasena de la cuenta
      * @return boolean
      */
-    public boolean isContraseñaCorrecta(String nombreCuenta, String contraseña);
+    public boolean isContrasenaCorrecta(String nombreCuenta, String contrasena);
 
     /**
      * Devuelve los skins que el jugador no tiene en su inventario
@@ -166,11 +166,11 @@ public interface SistemaRitoGames {
     public String obtenerDatosCuenta(String nombreCuenta);
 
     /**
-     * Será responsable de cambiar la contraseña de una cuenta
+     * Será responsable de cambiar la contrasena de una cuenta
      * @param nombreCuenta Nombre de la cuenta
-     * @param nuevaContraseña Nueva contraseña
+     * @param nuevacontrasena Nueva contrasena
      */
-    public void cambiarContraseña(String nombreCuenta, String nuevaContraseña);
+    public void cambiarContrasena(String nombreCuenta, String nuevacontrasena);
 
     /**
      * Devuelve las recaudaciones por rol
