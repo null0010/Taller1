@@ -13,7 +13,6 @@ public class App {
         sobrescribirArchivos(sistemaRitoGames);
     }
 
-
     public static void iniciarSesion(SistemaRitoGames sistemaRitoGames, Scanner input) {
         boolean cerrarSistema = false;
         boolean isMenuFinalizado = false;
@@ -87,7 +86,7 @@ public class App {
         String nombreCuenta = input.next();
         while (sistemaRitoGames.isUsuarioRegistrado(nombreCuenta)) {
             System.out.println("Lo siento, ese nombre ya se encuentra registrado, vuelta a intentarlo.");
-            System.out.println("Ingrese el nombre de la cuenta: ");
+            System.out.print("Ingrese el nombre de la cuenta: ");
             nombreCuenta = input.next();
         }
 
@@ -123,8 +122,9 @@ public class App {
                     String nombrePersonaje = input.next();
                     try {
                         System.out.println(sistemaRitoGames.obtenerSkinsDisponiblesPersonaje(nombreCuenta, nombrePersonaje));
+                        input.nextLine();
                         System.out.print("Ingrese el nombre de uno de los skins disponibles: ");
-                        String nombreSkins = input.next();
+                        String nombreSkins = input.nextLine();
                         boolean isCompraExitosa = sistemaRitoGames.comprarSkin(nombreCuenta, nombrePersonaje, nombreSkins);
                         if (isCompraExitosa) {
                             System.out.println("La compra se ha realizado exitosamente.");
@@ -242,9 +242,86 @@ public class App {
                   break;
 
               case 5:
+                  System.out.print("Ingrese el nombre del nuevo personaje: ");
+                  String nombrePersonaje = input.next();
+                  System.out.print("Ingrese el rol del personaje (SUP/ADC/TOP/MID/JG): ");
+                  String rol = input.next().toUpperCase();
+                  while (!rol.equals("SUP") &&
+                         !rol.equals("ADC") &&
+                         !rol.equals("TOP") &&
+                         !rol.equals("MID") &&
+                         !rol.equals("JG")) {
+                      System.out.print("Ingrese un rol valido (SUP/ADC/TOP/MID/JG): ");
+                      rol = input.next().toUpperCase();
+                  }
+
+                  boolean isIngresadoPersonaje = sistemaRitoGames.ingresarPersonaje(nombrePersonaje, rol);
+                  if (isIngresadoPersonaje) {
+                      System.out.println("El personaje fue ingresado exitosamente.");
+                      System.out.print("Ingrese la cantidad de skins del nuevo personaje: ");
+                      int cantidadSkins = input.nextInt();
+                      for (int i = 0; i < cantidadSkins; i++) {
+                          input.nextLine();
+                          System.out.print("Ingrese el nombre del skin: ");
+                          String nombreSkin = input.nextLine();
+                          System.out.print(
+                                  "Ingrese la primera letra de la calidad del skin [(M)itica/(D)efinitiva/(L)egendaria/(E)pica/(N)ormal]: ");
+                          String calidad = input.next().toUpperCase();
+                          while (!calidad.equals("M") &&
+                                  !calidad.equals("D") &&
+                                  !calidad.equals("L") &&
+                                  !calidad.equals("E") &&
+                                  !calidad.equals("N")) {
+                              System.out.print(
+                                      "Ingrese la primera letra de la calidad del skin [(M)itica/(D)efinitiva/(L)egendaria/(E)pica/(N)ormal]: ");
+                              calidad = input.next().toUpperCase();
+                          }
+
+                          boolean isIngresadoSkinPersonaje = sistemaRitoGames.ingresarSkinPersonaje(nombreSkin,
+                                  calidad);
+                          boolean isIngresadoSkinListaGeneral = sistemaRitoGames.ingresarSkinListaGeneral();
+                          if (isIngresadoSkinPersonaje && isIngresadoSkinListaGeneral) {
+                              System.out.println("El skin fue ingresado exitosamente.");
+                          }
+                      }
+                  }
+                  else {
+                      System.out.println("No hay especio disponible.");
+                  }
+
                   break;
 
               case 6:
+                  System.out.print("Ingrese el nombre del personaje al cual desea agregarle un skin: ");
+                  nombrePersonaje = input.next();
+                  input.nextLine();
+                  System.out.print("Ingrese el nombre del nuevo skin: ");
+                  String nombreSkin = input.nextLine();
+                  System.out.print("Ingrese la calidad del skin [(M)itica/(D)efinitiva/(L)egendaria/(E)pica/(N)ormal]: ");
+                  String calidad = input.next().toUpperCase();
+                  while (!calidad.equals("M") &&
+                          !calidad.equals("D") &&
+                          !calidad.equals("L") &&
+                          !calidad.equals("E") &&
+                          !calidad.equals("N")) {
+                      System.out.print("Ingrese la calidad del skin [(M)itica/(D)efinitiva/(L)egendaria/(E)pica/(N)ormal]: ");
+                      calidad = input.next().toUpperCase();
+                  }
+
+                  try {
+                      boolean isAsociadoSkinPersonaje = sistemaRitoGames.asociarSkinPersonaje(nombrePersonaje, nombreSkin,
+                              calidad);
+
+                      boolean isAsociadoSkinListaGeneral = sistemaRitoGames.asociarSkinListaGeneral(nombrePersonaje, nombreSkin);
+
+                      if (isAsociadoSkinPersonaje && isAsociadoSkinListaGeneral) {
+                          System.out.println("El skin fue ingresado exitosamente.");
+                      }
+                  }
+                  catch (Exception exception) {
+                      exception.printStackTrace();
+                  }
+
                   break;
 
               case 7:
@@ -296,6 +373,7 @@ public class App {
 
     public static void cargarPersonajes(SistemaRitoGames sistemaRitoGames) {
         File archivoPersonajes = new File("archivos/Personajes.txt");
+        sistemaRitoGames.ingresarPrecioPersonajes(975);
         try (Scanner scannerFile = new Scanner(archivoPersonajes)) {
             while (scannerFile.hasNext()) {
                 String linea = scannerFile.nextLine();
@@ -337,8 +415,8 @@ public class App {
                     int cantidadSkins = Integer.parseInt(partes[posicionCampo + 1].strip());
                     for(int j = 0; j < cantidadSkins; j++){
                         String nombreSkin = partes[posicionCampo + 2 + j].strip();
-                        sistemaRitoGames.asociarSkinPersonajeCuenta(nombreSkin);
-                        sistemaRitoGames.asociarSkinCuenta(nombreSkin);
+                        sistemaRitoGames.ingresarSkinPersonajeCuenta(nombreSkin);
+                        sistemaRitoGames.ingresarSkinCuenta(nombreSkin);
                     }
 
                     posicionCampo = posicionCampo + 2 + cantidadSkins;
