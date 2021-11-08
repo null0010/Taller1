@@ -6,7 +6,7 @@ import cl.ucn.ei.pa.sistemaRitoGames.logica.Region;
 
 public class Cuenta {
     private String nombre;
-    private String contraseña;
+    private String contrasena;
     private String nick;
     private int nivel;
     private int rp;
@@ -20,15 +20,15 @@ public class Cuenta {
      *
      *
      * @param nombre
-     * @param contraseña
+     * @param contrasena
      * @param nick
      * @param nivel
      * @param rp
      * @param region
      */
-    public Cuenta(String nombre, String contraseña, String nick, int nivel, int rp, Region region) {
+    public Cuenta(String nombre, String contrasena, String nick, int nivel, int rp, Region region) {
         this.nombre = nombre;
-        this.contraseña = contraseña;
+        this.contrasena = contrasena;
         this.nick = nick;
         this.nivel = nivel;
         this.rp = rp;
@@ -55,18 +55,18 @@ public class Cuenta {
 
     /**
      *
-     * @return the contraseña
+     * @return the contrasena
      */
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasena() {
+        return contrasena;
     }
 
     /**
      *
-     * @param contraseña
+     * @param contrasena
      */
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     /**
