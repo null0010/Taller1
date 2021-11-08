@@ -5,6 +5,11 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class App {
+
+    /**
+     * Este metodo se encargara de iniciar el programa
+     * @param args
+     */
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         SistemaRitoGames sistemaRitoGames = new SistemaRitoGamesImpl();
@@ -13,6 +18,11 @@ public class App {
         sobrescribirArchivos(sistemaRitoGames);
     }
 
+    /**
+     * Este metodo se encará de iniciar una sesión.
+     * @param sistemaRitoGames Sistema que contiene todos los metodos necesarios para la aplicación
+     * @param input Entrada de datos
+     */
     public static void iniciarSesion(SistemaRitoGames sistemaRitoGames, Scanner input) {
         boolean cerrarSistema = false;
         boolean isMenuFinalizado = false;
@@ -39,7 +49,7 @@ public class App {
                         }
 
                         if (opcion == 1) {
-                            registrarCliente(sistemaRitoGames, input);
+                            registrarJugador(sistemaRitoGames, input);
                             System.out.println("Se ha registrado exitosamente.");
                         }
                     }
@@ -81,7 +91,13 @@ public class App {
             }
         }
     }
-    public static void registrarCliente(SistemaRitoGames sistemaRitoGames, Scanner input) {
+
+    /**
+     * Este metodo se encargará de registrar a un jugador
+     * @param sistemaRitoGames Sistema que contiene todos los metodos necesarios para la aplicación
+     * @param input Entrada de datos
+     */
+    public static void registrarJugador(SistemaRitoGames sistemaRitoGames, Scanner input) {
         System.out.print("Ingrese el nombre de la cuenta: ");
         String nombreCuenta = input.next();
         while (sistemaRitoGames.isUsuarioRegistrado(nombreCuenta)) {
@@ -109,6 +125,12 @@ public class App {
         sistemaRitoGames.ingresarCuenta(nombreCuenta, contraseña, nick, 0, 0, region);
     }
 
+    /**
+     * Este metodo se encargará de iniciar el menu del cliente
+     * @param sistemaRitoGames Sistema que contiene todos los metodos necesarios para la aplicación
+     * @param input Entrada de datos
+     * @param nombreCuenta Nombre de la cuenta que inicio sesión
+     */
     public static void iniciarMenuCliente(SistemaRitoGames sistemaRitoGames, Scanner input, String nombreCuenta) {
         System.out.println("Bienvenido al Menu Cliente");
         boolean isCerrarSesion = false;
@@ -205,6 +227,10 @@ public class App {
 
     }
 
+    /**
+     * Devuelve un String con todas las opciones del menu cliente
+     * @return String
+     */
     public static String obtenerOpcionesMenuCliente() {
         String opciones = "1) Comprar Skin\n";
         opciones += "2) Comprar Personaje\n";
@@ -216,7 +242,11 @@ public class App {
         return opciones;
     }
 
-
+    /**
+     * Este metodo se encargará de iniciar el menu del admin
+     * @param sistemaRitoGames Sistema que contiene todos los metodos necesarios para la aplicación
+     * @param input Entrada de datos
+     */
     public static void iniciarMenuAdmin(SistemaRitoGames sistemaRitoGames, Scanner input) {
         System.out.println("Bienvenido al Menu Admin");
         boolean isCerrarSesion = false;
@@ -351,6 +381,10 @@ public class App {
         }
     }
 
+    /**
+     * Devuelve un String con todas las opciones del menu admin
+     * @return String
+     */
     public static String obtenerOpcionesMenuAdmin() {
         String opciones = "1) Desplegar recaudacion por rol\n";
         opciones += "2) Desplegar recaudacion total de ventas por región\n";
@@ -364,13 +398,20 @@ public class App {
         return opciones;
     }
 
+    /**
+     * Este metodo se encargará de cargar todos los archivos necesarios para la aplicación
+     * @param sistemaRitoGames Sistema que contiene todos los metodos necesarios para la aplicación
+     */
     public static void cargarArchivos(SistemaRitoGames sistemaRitoGames) {
         cargarPersonajes(sistemaRitoGames);
         cargarCuentas(sistemaRitoGames);
         cargarEstadisticas(sistemaRitoGames);
     }
 
-
+    /**
+     * Este metodo se encargará de cargar los datos del archivo personajes
+     * @param sistemaRitoGames Sistema que contiene todos los metodos necesarios para la aplicación
+     */
     public static void cargarPersonajes(SistemaRitoGames sistemaRitoGames) {
         File archivoPersonajes = new File("archivos/Personajes.txt");
         sistemaRitoGames.ingresarPrecioPersonajes(975);
@@ -394,6 +435,10 @@ public class App {
         }
     }
 
+    /**
+     * Este metodo se encargará de cargar los datos del archivo cuentas
+     * @param sistemaRitoGames Sistema que contiene todos los metodos necesarios para la aplicación
+     */
     public static void cargarCuentas(SistemaRitoGames sistemaRitoGames) {
         File archivoCuentas = new File("archivos/Cuentas.txt");
         try (Scanner scannerFile = new Scanner(archivoCuentas)) {
@@ -429,6 +474,10 @@ public class App {
 
     }
 
+    /**
+     * Este metodo se encargará de cargar los datos del archivo estadisticas
+     * @param sistemaRitoGames Sistema que contiene todos los metodos necesarios para la aplicación
+     */
     public static void cargarEstadisticas(SistemaRitoGames sistemaRitoGames) {
         File archivoEstadistica = new File("archivos/Estadisticas.txt");
 
@@ -445,13 +494,20 @@ public class App {
         }
     }
 
+    /**
+     * Este metodo se encargará de sobrescribir todos los archivos que fueron modificados durante la aplicación
+     * @param sistemaRitoGames Sistema que contiene todos los metodos necesarios para la aplicación
+     */
     public static void sobrescribirArchivos(SistemaRitoGames sistemaRitoGames) {
         sobrescribirArchivoPersonajes(sistemaRitoGames);
         sobrescribirArchivoCuentas(sistemaRitoGames);
         sobrescribirArchivoEstadisticas(sistemaRitoGames);
     }
 
-
+    /**
+     * Este metodo se encargará de sobrescribir los datos del archivo personajes
+     * @param sistemaRitoGames Sistema que contiene todos los metodos necesarios para la aplicación
+     */
     public static void sobrescribirArchivoPersonajes(SistemaRitoGames sistemaRitoGames) {
         try (FileWriter fileWriter = new FileWriter("archivos/Personajes.txt")) {
             fileWriter.write(sistemaRitoGames.obtenerDatosPersonajes());
@@ -462,6 +518,10 @@ public class App {
 
     }
 
+    /**
+     * Este metodo se encargará de sobrescribir los datos del archivo cuentas
+     * @param sistemaRitoGames Sistema que contiene todos los metodos necesarios para la aplicación
+     */
     public static void sobrescribirArchivoCuentas(SistemaRitoGames sistemaRitoGames) {
         try (FileWriter fileWriter = new FileWriter("archivos/Cuentas.txt")) {
             fileWriter.write(sistemaRitoGames.obtenerDatosCuentas());
@@ -471,6 +531,10 @@ public class App {
         }
     }
 
+    /**
+     * Este metodo se encargará de sobrescribir los datos del archivo estadisticas
+     * @param sistemaRitoGames Sistema que contiene todos los metodos necesarios para la aplicación
+     */
     public static void sobrescribirArchivoEstadisticas(SistemaRitoGames sistemaRitoGames) {
         try (FileWriter fileWriter = new FileWriter("archivos/Estadisticas.txt")) {
             fileWriter.write(sistemaRitoGames.obtenerDatosEstadisticas());
