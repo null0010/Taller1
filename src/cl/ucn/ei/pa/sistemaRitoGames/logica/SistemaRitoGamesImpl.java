@@ -69,9 +69,9 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
     }
 
     @Override
-    public boolean ingresarCuenta(String nombre, String contraseña, String nick, int nivel, int rp, String region) {
+    public boolean ingresarCuenta(String nombre, String contrasena, String nick, int nivel, int rp, String region) {
         Region regionEnum = Region.valueOf(region);
-        Cuenta cuenta = new Cuenta(nombre, contraseña, nick, nivel, rp, regionEnum);
+        Cuenta cuenta = new Cuenta(nombre, contrasena, nick, nivel, rp, regionEnum);
         return listaCuentas.agregarCuenta(cuenta);
     }
 
@@ -119,9 +119,9 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
     }
 
     @Override
-    public boolean isContraseñaCorrecta(String nombreCuenta, String contraseña) {
+    public boolean isContrasenaCorrecta(String nombreCuenta, String contrasena) {
         Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
-        return cuenta.getContraseña().equals(contraseña);
+        return cuenta.getContrasena().equals(contrasena);
     }
 
     @Override
@@ -267,22 +267,22 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
         salida += cuenta.getNombre() + "\n"
                      + cuenta.getNick() + "\n";
 
-        int longitudContraseña = cuenta.getContraseña().length();
-        String contraseñaSemiCensurada = "";
-        for (int i = 0; i < longitudContraseña - 3; i++) {
-            contraseñaSemiCensurada += "*";
+        int longitudContrasena = cuenta.getContrasena().length();
+        String contrasenaSemiCensurada = "";
+        for (int i = 0; i < longitudContrasena - 3; i++) {
+            contrasenaSemiCensurada += "*";
         }
 
-        contraseñaSemiCensurada += cuenta.getContraseña().substring(longitudContraseña - 3, longitudContraseña);
-        salida += contraseñaSemiCensurada + "\n";
+        contrasenaSemiCensurada += cuenta.getContrasena().substring(longitudContrasena - 3, longitudContrasena);
+        salida += contrasenaSemiCensurada + "\n";
 
         return salida;
     }
 
     @Override
-    public void cambiarContraseña(String nombreCuenta, String nuevaContraseña) {
+    public void cambiarContrasena(String nombreCuenta, String nuevaContrasena) {
         Cuenta cuenta = listaCuentas.buscarCuenta(nombreCuenta);
-        cuenta.setContraseña(nuevaContraseña);
+        cuenta.setContrasena(nuevaContrasena);
     }
 
     @Override
@@ -422,7 +422,7 @@ public class SistemaRitoGamesImpl implements SistemaRitoGames {
             ListaPersonajes listaPersonajesCuenta = cuenta.getListaPersonajes();
             salida += cuenta.getNombre()
                     + ","
-                    + cuenta.getContraseña()
+                    + cuenta.getContrasena()
                     + ","
                     + cuenta.getNick()
                     + ","
